@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Springboot集成Thymeleaf</title>
+</head>
+<body>
+    <p th:text="${data}"></p>
+    <b>展示user对象的数据（标准变量表达式）</b>
+    <p>
+        <span th:text="${user.id}"> </span>
+        <span th:text="${user.nick}"> </span>
+        <span th:text="${user.email}"> </span>
+        <span th:text="${user.phone}"> </span>
+        <span th:text="${user.address}"> </span>
+    </p>
+    <b>展示user对象的数据(选择星号表达式）</b>
+<!--    th:text和th:value属性的区别，一个在<>里面一个在<>外面-->
+    <p th:object="${user}">
+        <span th:text="*{id}"> </span>
+        <span th:text="*{nick}"> </span>
+        <span th:text="*{email}"> </span>
+        <span th:text="*{phone}"> </span>
+        <span th:text="*{address}"> </span>
+    </p>
+    <b>URL表达式</b>
+    <p>
+        <a th:href="@{'http://xxx/boot/info?id='+${user.id}}">查看</a>
+        <a th:href="@{'user/info?id='+${user.id}}">查看</a>
+        <!--有项目路径-->
+        <a th:href="@{'/user/info?id='+${user.id}}">查看</a>
+    </p>
+    <b>Thymeleaf的常见属性</b>
+    <p>
+        <form id="login" th:action="@{/login}" th:method="post">
+            <input th:id="username" name="username" th:value="${user.id}"/>
+            <input id="userId" name="userId" th:attr="value=${user.id}">
+        </form>
+    </p>
+    <p>
+<!--        static不需要写-->
+        <script th:src="@{/js/jquery-2.4-min.js}"></script>
+        <img th:src="@{/static/image/logo.png}"/>
+    </p>
+    <b>展示userList</b>
+    <p>
+        <span th:each="user,interStat:${userList}">
+            <span th:text="${interStat.index}"></span>
+            <span th:text="${user.id}"></span>
+            <span th:text="${user.nick}"> </span>
+            <span th:text="${user.email}"> </span>
+            <span th:text="${user.phone}"> </span>
+            <span th:text="${user.address}"> </span>
+            <br/>
+        </span>
+    </p>
+
+    <b>展示userMap</b>
+    <p>
+        <span th:each=" keyValue:${userMap}">
+            <span th:text="${keyValue.key}"></span>
+            <span th:text="${keyValue.value.id}"></span>
+            <span th:text="${keyValue.value.nick}"> </span>
+            <br/>
+        </span>
+    </p>
+    <b>展示List数组</b>
+    <p>
+        <span th:each="user:${userArray}">
+            <span th:text="${user.id}"></span>
+             <span th:text="${user.nick}"> </span>
+            <br/>
+        </span>
+    </p>
+    <b>复合集合循环展示</b>
+    <p>
+        <span th:each="keyvalue:${map}">
+           <span th:each="user:${keyvalue.value}">
+                <span th:text="${user.id}"></span>
+                <span th:text="${user.address}"> </span>
+                <span th:text="${user.phone}"> </span>
+                <br/>
+           </span>
+        </span>
+    </p>
+    <b>判断</b>
+    <p>
+        <span th:if="${sex == 1}"> 性别:男</span>
+        <span th:if="${sex == 2}"> 性别:女</span>
+    </p>
+<!--    <p>-->
+<!--        <span th:onclick="'myClick()'">请点击我</span>-->
+<!--    </p>-->
+
+    <b>内联表达式</b>
+    <p th:inline="text">
+        [[${user.id}]]
+        [[${user.nick}]]
+        [[${user.phone}]]
+        [[${user.email}]]
+        [[${user.address}]]
+    </p>
+    <p>
+        <span th:text="${#request.getContextPath()}"></span>
+    </p>
+    <p>
+        <span th:text="${#dates.format(nowDate,'yyyy-MM-dd HH:mm:ss')}"></span>
+        <br/>
+        <span th:text="${#strings.substring(nowDateStr,0,10)}"></span>
+        <br/>
+        <span th:text="${#aggregates.avg(intArray)}"></span>
+    </p>
+</body>
+</html>

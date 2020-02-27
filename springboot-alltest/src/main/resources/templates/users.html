@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SpringBoot 综合案例</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body style="margin: 35px;">
+    <table class="table table-hover">
+            <caption><a th:href="@{/all/user}">添加用户</a></caption>
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>昵称</th>
+            <th>手机号</th>
+            <th>E-mail</th>
+            <th>住址</th>
+            <th>管理</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="userInfo:${userInfoList}">
+            <td th:text="${userInfo.id}"></td>
+            <td th:text="${userInfo.nick}"></td>
+            <td th:text="${userInfo.phone}"></td>
+            <td th:text="${userInfo.email}"></td>
+            <td th:text="${userInfo.address}"></td>
+            <td>
+                <a th:href="@{'/all/user/'+${userInfo.id}}">修改</a>
+                <a th:href="'javascript:deleteUser(' + ${userInfo.id} + ')'">删除</a>
+            </td>
+        </tr>
+        <tr style="text-align: center">
+    <!--        colspan设置单元格可横跨的列数-->
+            <td colspan="6">
+                <span th:if="${curPage <= 1 }">
+                    首页
+                    上一页
+                </span>
+                <span th:if="${curPage > 1 }">
+                    <a th:href="@{'/all/users'}">首页</a>
+                    <a th:href="@{'/all/users?p='+${curPage - 1}}">上一页</a>
+                </span>
+
+                <span th:if="${curPage >= totalPages }">
+                    下一页
+                    尾页
+                </span>
+                <span th:if="${curPage < totalPages }">
+                    <a th:href="@{'/all/users?p='+${curPage + 1}}">下一页</a>
+                    <a th:href="@{'/all/users?p='+${totalPages}}">尾页</a>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <form id="deleteForm" th:method="delete" style="display:none;"></form>
+
+    <script type="text/javascript" th:inline="javascript">
+        //删除用户
+        function deleteUser(id) {
+            var url = [[${#request.getContextPath()}]]+"/all/user/"+id;
+            $("#deleteForm").attr("action",url);
+            $("#deleteForm").submit();
+        }
+    </script>
+</body>
+</html>
